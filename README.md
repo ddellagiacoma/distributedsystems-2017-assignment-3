@@ -4,17 +4,45 @@
 
 * A protocol for eventual consistency:
 
- * Writes are eventually applied in total order
- 
-  * same order on all replicas
+  * Writes are eventually applied in total order
   
-  * lead to the same value
-  
-  * eventual consistency
-  
- * Reads might not see most recent writes in total order
+    * same order on all replicas
+    
+    * lead to the same value
+    
+    * eventual consistency
+    
+  * Reads might not see most recent writes in total order
  
 * Used in many applications like Google File System (GFS) and Facebook’s Cassandra
+
+## Assumptions/Requirements
+
+* Boards are distributed:
+
+  * No centralized leader, no ring topology
+ 
+  * You can base on Lab 1’s code (if you want)
+ 
+* Each post is updated to the local board, then propagated to other boards
+
+* All boards are eventually consistent
+
+* Delete and modify are also supported
+
+## Sending messages
+
+* Use logical clocks
+
+  * Each post has a sequence number:
+  
+    * Sequence number of a new post: the last sequence number received + 1
+    
+  * On a node:
+  
+    * Posts are ordered by sequence numbers
+    
+    * If two posts have the same sequence number, break ties with some rule (e.g. prioritize highest IP address)
 
 ## Task 1: Implement Eventual Consistency https://youtu.be/SRK7eEmT8iI
 
@@ -34,7 +62,7 @@
 
 The following graph represents the time taken for all the blackboard to reach consistency state, i.e. the longest time among all nodes. The final time is calculated measuring the time the first message has been received by one of the nodes of the system and the time the last message has been received by one of the other nodes using the time.time() function. The graph compares two different models: centralized ([Lab2](https://github.com/ddellagiacoma/distributedsystems-2017-assignment-2)) and eventually consistent (Lab3).
 
-![image](https://user-images.githubusercontent.com/24565161/37824906-66ef2a06-2e8e-11e8-9cf9-a5f35d2e6b6f.png)
+![image](https://user-images.githubusercontent.com/24565161/37825370-e1fcd01c-2e8f-11e8-8069-1ae6e0a88a2a.png)
 
 As we can see, the time taken to reach consistency is always longer in the centralized system. This is because every POST requests received by non-leader nodes has to be retransmitted to the leader which will propagate the message to all the other nodes. For this reason, the number of messages in the centralized system is higher than eventually consistent system. Moreover, incrementing the number of nodes in the system, the leader will have to handle a greater amount of data that could slow down the system.
 
