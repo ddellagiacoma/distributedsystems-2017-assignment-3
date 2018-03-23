@@ -21,9 +21,7 @@
 * Boards are distributed:
 
   * No centralized leader, no ring topology
- 
-  * You can base on Lab 1’s code (if you want)
- 
+  
 * Each post is updated to the local board, then propagated to other boards
 
 * All boards are eventually consistent
