@@ -1,5 +1,21 @@
 # Eventually Consistent Blackboard
 
+* All replicas eventually converge to the same value
+
+* A protocol for eventual consistency:
+
+ * Writes are eventually applied in total order
+ 
+  * same order on all replicas
+  
+  * lead to the same value
+  
+  * eventual consistency
+  
+ * Reads might not see most recent writes in total order
+ 
+* Used in many applications like Google File System (GFS) and Facebook’s Cassandra
+
 ## Task 1: Implement Eventual Consistency https://youtu.be/SRK7eEmT8iI
 
 * Demonstrate that the Blackboard is eventually consistent
@@ -18,7 +34,7 @@
 
 The following graph represents the time taken for all the blackboard to reach consistency state, i.e. the longest time among all nodes. The final time is calculated measuring the time the first message has been received by one of the nodes of the system and the time the last message has been received by one of the other nodes using the time.time() function. The graph compares two different models: centralized ([Lab2](https://github.com/ddellagiacoma/distributedsystems-2017-assignment-2)) and eventually consistent (Lab3).
 
-
+![image](https://user-images.githubusercontent.com/24565161/37824906-66ef2a06-2e8e-11e8-9cf9-a5f35d2e6b6f.png)
 
 As we can see, the time taken to reach consistency is always longer in the centralized system. This is because every POST requests received by non-leader nodes has to be retransmitted to the leader which will propagate the message to all the other nodes. For this reason, the number of messages in the centralized system is higher than eventually consistent system. Moreover, incrementing the number of nodes in the system, the leader will have to handle a greater amount of data that could slow down the system.
 
